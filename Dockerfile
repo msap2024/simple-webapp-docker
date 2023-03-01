@@ -1,11 +1,13 @@
-FROM ubuntu:latest
+from alpine:latest
+RUN apk add --no-cache py3-pip \
+    && pip3 install --upgrade pip
 
-RUN apt-get update && apt-get install -y python3 python3-pip -r /requirements.txt
+WORKDIR /app
+COPY . /app
 
-RUN pip install flask 
+RUN pip3 --no-cache-dir install -r requirements.txt
 
 EXPOSE 5000
 
-COPY app.py /opt/
-
-ENTRYPOINT FLASK_APP=/opt/app.py flask run --host=0.0.0.0 --port=8080
+ENTRYPOINT ["python3"]
+CMD ["app.py"]
